@@ -7,7 +7,7 @@
 
 import string
 import random
-
+import requests
 
 class Game:
     """
@@ -48,19 +48,14 @@ class Game:
                 letters.remove(letter)
             else:
                 return False
-        return True
+        return self.__check_dictionary(word)
 
+    @staticmethod
+    def __check_dictionary(word):
+        response = requests.get(f"https://wagon-dictionary.herokuapp.com/{word}")
+        json_response = response.json()
+        return json_response['found']
 
-    def reset_grid(self):
-        """
-        Resets the grid to a new set of nine random uppercase letters.
-        """
-
-        self.grid = [random.choice(string.ascii_uppercase) for _ in range(9)]
-
-    def display_grid(self):
-        """
-        Displays the current state of the grid.
-        """
-
-        return ' '.join(self.grid)
+# new_game = Game()
+# new_game.grid = list('KWIENFUQW')
+# print(new_game.is_valid('FEUN')) # => True
