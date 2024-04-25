@@ -1,54 +1,66 @@
 """
-This module defines a Game class that creates a random grid of letters and checks if a given word
-can be formed with the letters in the grid, considering each letter's frequency in the grid.
+    This module contains the Game class, which manages a grid of randomly chosen uppercase letters.
+    The Game class provides functionality to validate if a specific word can be formed from the
+    letters in the grid, with each letter in the grid usable only once per validation.
 """
 
+
+import string
 import random
-from collections import Counter
 
 
 class Game:
     """
-        Initializes the Game object with a random grid of uppercase letters.
-        The grid is of size 9 by default.
+    A simple game class that manages a grid of randomly chosen uppercase letters.
+
+    Attributes:
+        grid (list of str): A list containing single uppercase letters.
     """
 
-    def __init__(self) -> None:
-        self.size = 9
-        self.grid = [random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ') for _ in range(self.size)]
-        self.dictionary = self.load_dictionary()
-
-
-    def load_dictionary(self):
-        """Generates a new random grid of uppercase letters."""
-        return {'KNOWN', 'WORD', 'ANOTHER', 'VALID', 'WORDS'}
-
-
-    def is_valid(self, word: str) -> bool:
+    def __init__(self):
         """
-        Check if the word can be formed from the letters in the game's grid,
-        is longer than 3 characters, and is in the dictionary.
+        Initializes a new game instance by populating the rid with nine random
+        uppercase letters.
         """
-        if not word or len(word) <= 3 or word.upper() not in self.dictionary:
+        self.grid = []
+        for _ in range(9):
+            self.grid.append(random.choice(string.ascii_uppercase))
+
+    def is_valid(self, word):
+        """
+        Checks if the provided word can be formed with the letters currently in
+        the grid. Each letter in the grid
+        can only be used once per word validation call.
+
+        Args:
+            word (str): The word to check against the grid.
+
+        Returns:
+            bool: True if the word can be formed using the letters in the
+                  rid without reuse within the word,
+                  False otherwise.
+        """
+        if not word:
             return False
-        word_count = Counter(word.upper())
-        grid_count = Counter(self.grid)
-        return all(word_count[letter] <= grid_count[letter] for letter in word)
+        letters = self.grid.copy() # Consume letters from the grid
+        for letter in word:
+            if letter in letters:
+                letters.remove(letter)
+            else:
+                return False
+        return True
 
 
+    def reset_grid(self):
+        """
+        Resets the grid to a new set of nine random uppercase letters.
+        """
 
-# Example usage:
-# game = Game()
-# game.display_grid()
-# print(game.is_valid("HELLO"))  # Output depends on the random grid
-# game.reset_grid()
-# game.display_grid()
+        self.grid = [random.choice(string.ascii_uppercase) for _ in range(9)]
 
-# Example usage:
-# game = Game()
-# print(game.is_valid("HELLO"))  # Output depends on the random grid
+    def display_grid(self):
+        """
+        Displays the current state of the grid.
+        """
 
-# new_game = Game()
-# new_game.grid = list('KWIENFUQW')
-# print(new_game.is_valid('FEUN'))
-# => true
+        return ' '.join(self.grid)
