@@ -15,43 +15,26 @@ class Game:
 
     def __init__(self) -> None:
         self.size = 9
-        self.grid = self.generate_grid()
+        self.grid = [random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ') for _ in range(self.size)]
+        self.dictionary = self.load_dictionary()
 
 
-    def generate_grid(self):
+    def load_dictionary(self):
         """Generates a new random grid of uppercase letters."""
-        return [random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ') for _ in range(self.size)]
+        return {'KNOWN', 'WORD', 'ANOTHER', 'VALID', 'WORDS'}
 
 
     def is_valid(self, word: str) -> bool:
         """
-        Check if the provided word can be formed from the letters in the game's grid and has more than 3 characters.
-        A valid word must:
-        - Be formed using only the letters in the grid, considering their frequencies.
-        - Be longer than 3 characters.
-
-        Args:
-            word (str): The word to check for validity.
-
-        Returns:
-            bool: True if the word can be formed from the grid and meets the length requirement, False otherwise.
+        Check if the word can be formed from the letters in the game's grid,
+        is longer than 3 characters, and is in the dictionary.
         """
-        if not word or len(word) <= 3:
+        if not word or len(word) <= 3 or word.upper() not in self.dictionary:
             return False
-
-        word_count = Counter(word)
+        word_count = Counter(word.upper())
         grid_count = Counter(self.grid)
         return all(word_count[letter] <= grid_count[letter] for letter in word)
 
-
-    def display_grid(self):
-        """Display the grid in a formatted output."""
-        print("Current Grid:", ''.join(self.grid))
-
-
-    def reset_grid(self):
-        """Resets the grid with new random letters."""
-        self.grid = self.generate_grid()
 
 
 # Example usage:
