@@ -15,31 +15,26 @@ class Game:
 
     def __init__(self) -> None:
         self.size = 9
-        self.grid = self.generate_grid()
+        self.grid = [random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ') for _ in range(self.size)]
+        self.dictionary = self.load_dictionary()
 
 
-    def generate_grid(self):
+    def load_dictionary(self):
         """Generates a new random grid of uppercase letters."""
-        return [random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ') for _ in range(self.size)]
+        return {'KNOWN', 'WORD', 'ANOTHER', 'VALID', 'WORDS'}
 
 
     def is_valid(self, word: str) -> bool:
-        """Check if the provided word can be formed from the letters in the game's grid."""
-        if not word:
+        """
+        Check if the word can be formed from the letters in the game's grid,
+        is longer than 3 characters, and is in the dictionary.
+        """
+        if not word or len(word) <= 3 or word.upper() not in self.dictionary:
             return False
-        word_count = Counter(word)
+        word_count = Counter(word.upper())
         grid_count = Counter(self.grid)
         return all(word_count[letter] <= grid_count[letter] for letter in word)
 
-
-    def display_grid(self):
-        """Display the grid in a formatted output."""
-        print("Current Grid:", ''.join(self.grid))
-
-
-    def reset_grid(self):
-        """Resets the grid with new random letters."""
-        self.grid = self.generate_grid()
 
 
 # Example usage:
@@ -49,8 +44,11 @@ class Game:
 # game.reset_grid()
 # game.display_grid()
 
-
-
 # Example usage:
 # game = Game()
 # print(game.is_valid("HELLO"))  # Output depends on the random grid
+
+# new_game = Game()
+# new_game.grid = list('KWIENFUQW')
+# print(new_game.is_valid('FEUN'))
+# => true
