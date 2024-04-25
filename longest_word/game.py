@@ -24,9 +24,21 @@ class Game:
 
 
     def is_valid(self, word: str) -> bool:
-        """Check if the provided word can be formed from the letters in the game's grid."""
-        if not word:
+        """
+        Check if the provided word can be formed from the letters in the game's grid and has more than 3 characters.
+        A valid word must:
+        - Be formed using only the letters in the grid, considering their frequencies.
+        - Be longer than 3 characters.
+
+        Args:
+            word (str): The word to check for validity.
+
+        Returns:
+            bool: True if the word can be formed from the grid and meets the length requirement, False otherwise.
+        """
+        if not word or len(word) <= 3:
             return False
+
         word_count = Counter(word)
         grid_count = Counter(self.grid)
         return all(word_count[letter] <= grid_count[letter] for letter in word)
@@ -49,8 +61,11 @@ class Game:
 # game.reset_grid()
 # game.display_grid()
 
-
-
 # Example usage:
 # game = Game()
 # print(game.is_valid("HELLO"))  # Output depends on the random grid
+
+# new_game = Game()
+# new_game.grid = list('KWIENFUQW')
+# print(new_game.is_valid('FEUN'))
+# => true
