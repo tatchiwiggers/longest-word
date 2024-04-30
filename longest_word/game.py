@@ -4,10 +4,10 @@
     letters in the grid, with each letter in the grid usable only once per validation.
 """
 
-
 import string
 import random
 import requests
+
 
 class Game:
     """
@@ -42,7 +42,7 @@ class Game:
         """
         if not word:
             return False
-        letters = self.grid.copy() # Consume letters from the grid
+        letters = self.grid.copy()  # Consume letters from the grid
         for letter in word:
             if letter in letters:
                 letters.remove(letter)
@@ -54,7 +54,8 @@ class Game:
     def __check_dictionary(word):
         response = requests.get(f"https://wagon-dictionary.herokuapp.com/{word}")
         json_response = response.json()
-        return json_response['found']
+        return json_response["found"]
+
 
 # new_game = Game()
 # new_game.grid = list('KWIENFUQW')
